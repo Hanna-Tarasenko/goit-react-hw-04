@@ -1,0 +1,44 @@
+.formWrapper {
+  display: flex;
+  margin-bottom: 32px;
+}
+.formAdd {
+  border: 5px solid #ccc;
+  border-radius: 6px;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  width: 320px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.labelAdd {
+  display: flex;
+  flex-direction: column;
+}
+.spanAdd {
+  display: flex;
+  justify-content: flex-start;
+  font-weight: bold;
+}
+.fieldAdd {
+  justify-content: flex-start;
+  width: 250px;
+  border: 2px solid wheat;
+  border-radius: 6px;
+  height: 26px;
+}
+.btnAdd {
+  width: 130px;
+  height: 50px;
+  background-color: wheat;
+  font-size: 16px;
+  color: rgb(13, 13, 60);
+  padding: 8px;
+}
+
+.error {
+  color: red;
+}
