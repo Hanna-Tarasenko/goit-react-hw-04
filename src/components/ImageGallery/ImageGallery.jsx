@@ -8,14 +8,17 @@ const ImageGallery = ({ images, loading, loadMore, openModal }) => {
     <div>
       <ul className={s.gallerycontainer}>
         {images.map((image) => (
-          <li
-            className={s.galleryItem}
-            key={image.id}
-            onClick={() =>
-              openModal({ src: image.urls.regular, alt: image.alt_description })
-            }
-          >
-            <ImageCard src={image.urls.small} alt={image.alt_description} />
+          <li className={s.galleryItem} key={image.id}>
+            <ImageCard
+              src={image.urls.small}
+              alt={image.alt_description}
+              onClick={() =>
+                openModal({
+                  src: image.urls.regular,
+                  alt: image.alt_description,
+                })
+              }
+            />
           </li>
         ))}
       </ul>

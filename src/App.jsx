@@ -3,11 +3,13 @@ import "./App.css";
 import SearchBar from "./components/SearchBar/SearchBar";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import ImageModal from "./components/ImageModal/ImageModal";
 import { useEffect } from "react";
 import { fetchImages } from "./services/Unsplash";
 import Loader from "./components/Loader/Loader";
+import { ErrorMessage } from "formik";
+import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 
 const App = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -60,19 +62,17 @@ const App = () => {
 
   return (
     <div>
-      <h1></h1>
       <SearchBar onSubmit={handleSearchSubmit} />
-      {loading && images.length === 0 ? (
-        <Loader />
-      ) : error ? (
-        <div>{error}</div>
-      ) : (
-        <ImageGallery
-          images={images}
-          loading={loading}
-          loadMore={loadMore}
-          openModal={openModal}
-        />
+      {loading && images.length === 0 && <Loader />}
+      {error && <ErrorMessage message={error} />}
+      {!loading && images.length > 0 && (
+        <>
+          <ImageGallery images={images} openModal={openModal} />
+          <LoadMoreBtn
+            onLoadMore={loadMore}
+            show={images.length > 0 && !loading}
+          />
+        </>
       )}
       <ImageModal
         isOpen={modalIsOpen}
@@ -80,7 +80,6 @@ const App = () => {
         imageSrc={selectedImage.src}
         alt={selectedImage.alt}
       />
-      <Toaster />
     </div>
   );
 };

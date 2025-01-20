@@ -5,8 +5,7 @@ const ErrorMessage = ({ message }) => {
   useEffect(() => {
     toast.error(message);
   }, [message]);
-
-  return null;
+  return <div>{message}</div>;
 };
 
 export default ErrorMessage;
