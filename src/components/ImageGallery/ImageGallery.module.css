@@ -1,0 +1,18 @@
+.gallerycontainer {
+  padding-left: 156px;
+  padding-right: 156px;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  width: 980px;
+  gap: 24px;
+  margin-bottom: 16px;
+  list-style: none;
+}
+.galleryItem {
+  flex-direction: row;
+  border: 1px solid #808080;
+  text-align: center;
+}

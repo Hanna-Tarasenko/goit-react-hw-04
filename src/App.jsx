@@ -1,57 +1,86 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
-import ContactForm from "./components/ContactForm/ContactForm";
-import ContactList from "./components/ContactList/ContactList";
-import { nanoid } from "nanoid";
-import SearchBox from "./components/SearchBox/SearchBox";
+import SearchBar from "./components/SearchBar/SearchBar";
+import ImageGallery from "./components/ImageGallery/ImageGallery";
+
+import toast, { Toaster } from "react-hot-toast";
+import ImageModal from "./components/ImageModal/ImageModal";
+import { useEffect } from "react";
+import { fetchImages } from "./services/Unsplash";
+import Loader from "./components/Loader/Loader";
 
 const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    const savedContacts = localStorage.getItem("contacts");
-    return savedContacts
-      ? JSON.parse(savedContacts)
-      : [
-          { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-          { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-          { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-          { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-        ];
-  });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState({ src: "", alt: "" });
 
-  const [searchParam, setSearchParam] = useState("");
+  const handleSearchSubmit = (query) => {
+    setSearchQuery(query);
+  };
 
   useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contacts));
-  }, [contacts]);
+    const getImages = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const fetchedImages = await fetchImages(searchQuery, page);
+        setImages((prevImages) => [...prevImages, ...fetchedImages]);
+      } catch (err) {
+        console.error("Error:", err);
+        setError("Failed to fetch images.");
+        toast.error("Failed to fetch images.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleSearch = (value) => {
-    setSearchParam(value);
+    if (searchQuery) {
+      setImages([]);
+      setPage(1);
+      getImages();
+    }
+  }, [searchQuery, page]);
+
+  const loadMore = async () => {
+    setPage((prevPage) => prevPage + 1);
   };
 
-  const foundContacts = contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(searchParam.toLowerCase())
-  );
-
-  const onAddContact = (newContact) => {
-    const contactWithID = { ...newContact, id: nanoid() };
-    setContacts((prevContacts) => [...prevContacts, contactWithID]);
+  const openModal = (image) => {
+    setSelectedImage(image);
+    setModalIsOpen(true);
   };
 
-  const onDeleteContact = (contactId) => {
-    setContacts((prevContacts) =>
-      prevContacts.filter((contact) => contact.id !== contactId)
-    );
+  const closeModal = () => {
+    setModalIsOpen(false);
   };
 
   return (
     <div>
-      <h1>Phonebook</h1>
-      <ContactForm onAddContact={onAddContact} />
-      <SearchBox searchParam={searchParam} handleSearch={handleSearch} />
-      <ContactList
-        contacts={foundContacts}
-        onDeleteContact={onDeleteContact}
-      />{" "}
+      <h1></h1>
+      <SearchBar onSubmit={handleSearchSubmit} />
+      {loading && images.length === 0 ? (
+        <Loader />
+      ) : error ? (
+        <div>{error}</div>
+      ) : (
+        <ImageGallery
+          images={images}
+          loading={loading}
+          loadMore={loadMore}
+          openModal={openModal}
+        />
+      )}
+      <ImageModal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        imageSrc={selectedImage.src}
+        alt={selectedImage.alt}
+      />
+      <Toaster />
     </div>
   );
 };

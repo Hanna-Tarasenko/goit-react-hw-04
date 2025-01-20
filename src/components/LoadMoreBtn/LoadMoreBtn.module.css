@@ -1,0 +1,14 @@
+.loadBtn {
+  height: 34px;
+  border-color: cadetblue;
+  background-color: cornsilk;
+  padding: 12px;
+  width: 126px;
+  height: 46px;
+  color: darkcyan;
+}
+
+.loadBtn:hover {
+  background-color: lightgray;
+  color: azure;
+}
