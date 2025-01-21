@@ -1,11 +1,14 @@
-import toast from "hot-toast";
+import toast from "react-hot-toast";
 import { useEffect } from "react";
 
 const ErrorMessage = ({ message }) => {
   useEffect(() => {
-    toast.error(message);
+    if (message) {
+      toast.error(message);
+    }
   }, [message]);
-  return <div>{message}</div>;
+
+  return <div className="error-message">{message}</div>;
 };
 
 export default ErrorMessage;

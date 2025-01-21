@@ -2,14 +2,13 @@ import { useState } from "react";
 import "./App.css";
 import SearchBar from "./components/SearchBar/SearchBar";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
-
 import toast from "react-hot-toast";
 import ImageModal from "./components/ImageModal/ImageModal";
 import { useEffect } from "react";
 import { fetchImages } from "./services/Unsplash";
 import Loader from "./components/Loader/Loader";
-import { ErrorMessage } from "formik";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 
 const App = () => {
   const [searchQuery, setSearchQuery] = useState("");
